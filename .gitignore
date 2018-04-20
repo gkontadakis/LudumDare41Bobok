@@ -10,7 +10,6 @@ Assets/AssetStoreTools*
 # ===================================== #
 # Visual Studio / MonoDevelop generated #
 # ===================================== #
-ExportedObj/
 .vs
 *.svd
 *.userprefs
@@ -38,3 +37,26 @@ Thumbs.db
 # Android binary #
 # ============== #
 *.apk
+
+
+
+
+# ===========================
+# Default Collab Ignore Rules
+# ===========================
+
+# OS Generated
+# ============
+[Tt]humbs.db
+[Dd]esktop.ini
+
+# Visual Studio / MonoDevelop generated
+# =====================================
+[Ee]xported[Oo]bj/
+
+# Unity generated
+# ===============
+[Oo]bj/
+[Bb]uild
+sysinfo.txt
+*.stackdump
