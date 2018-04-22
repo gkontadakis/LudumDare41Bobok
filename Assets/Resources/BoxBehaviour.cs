@@ -52,12 +52,12 @@ public class BoxBehaviour : MonoBehaviour
         }
         else if(_placeAnimStarted)
         {
-            transform.localPosition = Vector3.Lerp(transform.localPosition, Vector3.zero, 2.5f * Time.smoothDeltaTime);
+            transform.localPosition = Vector3.Lerp(transform.localPosition, Vector3.zero, 2.0f * Time.smoothDeltaTime);
             transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.identity, 2.5f * Time.smoothDeltaTime);
-            if (Vector3.Distance(transform.localPosition, Vector3.zero) < 1f && Mathf.Abs(transform.localRotation.eulerAngles.z) < 1f)
+            if (Vector3.Distance(transform.localPosition, Vector3.zero) < 0.01f)    // TODO proper check Z angle of quaternion  
             {
                 transform.localPosition = Vector3.zero;
-                transform.localRotation = transform.localRotation;
+                transform.localRotation = Quaternion.identity;
                 _placeAnimStarted = false;
 
                 transform.parent.parent.GetComponent<SlotManager>().NotifySlotManager();
