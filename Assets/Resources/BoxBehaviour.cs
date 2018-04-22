@@ -27,6 +27,13 @@ public class BoxBehaviour : MonoBehaviour
 
     private bool _placeAnimStarted;
 
+    private bool _playDestroyAnim;
+
+    public void MarkForDestroy()
+    {
+        _playDestroyAnim = true;
+    }
+
     // Use this for initialization
     void Start()
     {
@@ -40,18 +47,33 @@ public class BoxBehaviour : MonoBehaviour
         if (IsActiveBox)
         {
             Color color = GetComponent<Renderer>().material.GetColor("_Color");
-            color.a = Mathf.PingPong(Time.time, 1); // 0.5f * (Mathf.Cos(2 * Mathf.PI * Time.realtimeSinceStartup) + 1);
+            color.a = Mathf.PingPong(Time.time, 1);
             GetComponent<Renderer>().material.SetColor("_Color", color);
         }
         else if(_placeAnimStarted)
         {
             transform.localPosition = Vector3.Lerp(transform.localPosition, Vector3.zero, 2.5f * Time.smoothDeltaTime);
             transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.identity, 2.5f * Time.smoothDeltaTime);
-            if (Vector3.Distance(transform.localPosition, Vector3.zero) < 0.1f && Mathf.Abs(transform.localRotation.eulerAngles.z) < 0.1f)
+            if (Vector3.Distance(transform.localPosition, Vector3.zero) < 1f && Mathf.Abs(transform.localRotation.eulerAngles.z) < 1f)
             {
                 transform.localPosition = Vector3.zero;
                 transform.localRotation = transform.localRotation;
                 _placeAnimStarted = false;
+
+                transform.parent.parent.GetComponent<SlotManager>().NotifySlotManager();
+            }
+        }
+        else if (_playDestroyAnim)
+        {
+            Color color = GetComponent<Renderer>().material.GetColor("_Color");
+            color.a = Mathf.PingPong(2.5f * Time.time, 1);
+            GetComponent<Renderer>().material.SetColor("_Color", color);
+
+            transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 2.5f * Time.smoothDeltaTime);
+            if (Vector3.Distance(transform.localScale, Vector3.zero) < 0.1f)
+            {
+                _playDestroyAnim = false;
+                Destroy(gameObject);
             }
         }
     }
@@ -95,6 +117,7 @@ public class BoxBehaviour : MonoBehaviour
 
     void OnTriggerEnter(Collider col)
     {
+
         if (col.tag == "Slot")
         {
             _overlappingSlots.Add(col);
@@ -103,7 +126,8 @@ public class BoxBehaviour : MonoBehaviour
 
     void OnTriggerExit(Collider col)
     {
-        if (tag == "Slot")
+
+        if (col.tag == "Slot")
         {
             _overlappingSlots.Remove(col);
         }
@@ -115,10 +139,10 @@ public class BoxBehaviour : MonoBehaviour
         if (OverlapsSlots)
         {
             minSlot = _overlappingSlots.First();
-            var minDistance = Vector3.Distance(transform.position, minSlot.ClosestPoint(transform.position));
+            var minDistance = Vector3.Distance(transform.position, minSlot.transform.position); //minSlot.ClosestPoint(transform.position)
             foreach (var slot in _overlappingSlots)
             {
-                var currentDistance = Vector3.Distance(transform.position, slot.ClosestPoint(transform.position));
+                var currentDistance = Vector3.Distance(transform.position, slot.transform.position); //slot.ClosestPoint(transform.position)
                 if (currentDistance < minDistance)
                 {
                     currentDistance = minDistance;

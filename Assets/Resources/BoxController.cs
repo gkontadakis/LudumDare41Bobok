@@ -83,22 +83,22 @@ public class BoxController : MonoBehaviour
                 _boxBehaviours[CurrentBox].GetComponent<Rigidbody>()
                     .AddForce(Vector3.down * ForceStrength, ForceMode.Impulse);
             }
+        }
 
-            //If on ground and on at least one overlapping slot place
-            var atLeastOneOverlap = false;
-            if (Input.GetKeyDown(KeyCode.Space))
+        //If at least one overlapping slot place then try placing
+        var atLeastOneOverlap = false;
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            foreach (var boxBehaviour in _boxBehaviours)
             {
-                foreach (var boxBehaviour in _boxBehaviours)
-                {
-                    atLeastOneOverlap |= boxBehaviour.OverlapsSlots;
-                    if (atLeastOneOverlap) break;
-                }
+                atLeastOneOverlap |= boxBehaviour.OverlapsSlots;
+                if (atLeastOneOverlap) break;
+            }
 
-                if (atLeastOneOverlap)
-                {
-                    StopActiveTetra();
-                    AddToSlots();
-                }
+            if (atLeastOneOverlap)
+            {
+                StopActiveTetra();
+                AddToSlots();
             }
         }
     }
@@ -147,6 +147,17 @@ public class BoxController : MonoBehaviour
         }
 
         if (foundCollider != null)
-            foundCollider.transform.parent.GetComponent<SlotManager>().SetExpectedSlots(expectedSlots);
+        {
+            foundCollider.transform.parent.GetComponent<SlotManager>().SetExpectedSlots(expectedSlots); //Notify SlotManager in what to expect
+        }
+
+        SpawnAndDestroy();
+    }
+
+    public void SpawnAndDestroy()
+    {
+        GameObject player = Resources.Load("Player") as GameObject;
+        Instantiate(player);
+        Destroy(gameObject);
     }
 }
