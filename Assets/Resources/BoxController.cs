@@ -157,7 +157,8 @@ public class BoxController : MonoBehaviour
     public void SpawnAndDestroy()
     {
         GameObject player = Resources.Load("Player") as GameObject;
-        Instantiate(player, GameObject.Find("GameManager").GetComponent<GameManager>().PlayerSpawnLocation, Quaternion.identity);
+        GameObject newPlayer = Instantiate(player, GameObject.Find("GameManager").GetComponent<GameManager>().PlayerSpawnLocation, Quaternion.identity);
+        newPlayer.name = "Player";
         Destroy(gameObject);
     }
 }

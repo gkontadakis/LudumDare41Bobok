@@ -13,7 +13,9 @@ public class GameManager : MonoBehaviour
     private GameObject _infoImage;
     private Text _infoText;
 
-    private readonly Vector3 _firstCameraCheckPoint = new Vector3(7.77f, 5.11f, -16.69619f);
+    private GameObject _controlsPanel;
+
+    private readonly Vector3 _firstCameraCheckPoint = new Vector3(7.77f, 8.11f, -16.69619f);
 
     private float _msgDt;
 
@@ -25,6 +27,8 @@ public class GameManager : MonoBehaviour
     public Vector3 PlayerSpawnLocation;
 
     private bool _introSkipped;
+
+    private bool _controlsShown;
 
     private enum GameTransition
     {
@@ -62,12 +66,15 @@ public class GameManager : MonoBehaviour
 	    _playerBad.SetActive(false);
         _infoImage = GameObject.Find("InfoImage");
 	    _infoImage.SetActive(false);
-	    _gameTransition = GameTransition.GtCugoodCryDone;
+	    _gameTransition = GameTransition.GtCameraDown;
 	    _infoText = _infoImage.transform.GetChild(0).GetComponent<Text>();
 	    _introSkipped = false;
+	    _controlsPanel = GameObject.Find("ControlsPanel");
+        _controlsPanel.SetActive(false);
+	    _controlsShown = false;
 
-
-	}
+	    ShowMessage("If you cannot stand the intro press Space to skip", Color.black, 3.0f);
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -81,6 +88,10 @@ public class GameManager : MonoBehaviour
                 Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, _firstCameraCheckPoint, 0.5f * Time.smoothDeltaTime);
 	            _player.transform.position = _startPlayerPos + new Vector3(Mathf.PingPong(Time.time, 0.5f), 0, 0);
 	            _player.transform.rotation = _startPlayerRot;
+	            if (MessageEnded)
+	            {
+	                HideMessage();
+	            }
 
                 if (Vector3.Distance(Camera.main.transform.position, _firstCameraCheckPoint) < 0.1f)
 	            {
@@ -169,13 +180,18 @@ public class GameManager : MonoBehaviour
                 SkipIntro();
                 //Game sound starts
                 break;
+            case GameTransition.GtMainGame:
+                if (_player == null)    // When deleted then find new player again
+                    _player = GameObject.Find("Player");
+                Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, new Vector3(_player.transform.GetChild(0).position.x, Camera.main.transform.position.y, Camera.main.transform.position.z), Time.smoothDeltaTime);
+                break;
             default:
 	            break;
         }
 
 	    if (_gameTransition != GameTransition.GtMainGame && Input.GetKeyDown(KeyCode.Space))
 	    {
-	        
+	        SkipIntro();
 	    }
 	}
 
@@ -196,6 +212,7 @@ public class GameManager : MonoBehaviour
 
     void HideMessage()
     {
+        if (!_infoImage.activeInHierarchy) return;
         _infoImage.SetActive(false);
         _infoText.text = "";
         _msgDt = 0;
@@ -223,5 +240,11 @@ public class GameManager : MonoBehaviour
     {
         _playerBad.SetActive(true);
         ShowMessage("Cubad: Sorry for interupting", Color.black, 4.0f);
+    }
+
+    public void ToggleControlPanel()    // Called by Buttons in Editor
+    {
+        _controlsShown = !_controlsShown;
+        _controlsPanel.SetActive(_controlsShown);
     }
 }
