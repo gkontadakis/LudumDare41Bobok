@@ -12,13 +12,17 @@ public class BoxController : MonoBehaviour
 
     private List<BoxBehaviour> _boxBehaviours;
 
+    private List<Vector3> _boxStartPos;
+
     // Use this for initialization
     void Start()
     {
         _boxBehaviours = new List<BoxBehaviour>();
+        _boxStartPos = new List<Vector3>();
         for (var i = 0; i < transform.childCount; i++)
         {
             _boxBehaviours.Add(transform.GetChild(i).GetComponent<BoxBehaviour>());
+            _boxStartPos.Add(transform.GetChild(i).localPosition);
         }
 
         _boxBehaviours[CurrentBox].SetActiveBox(true);
@@ -160,5 +164,18 @@ public class BoxController : MonoBehaviour
         GameObject newPlayer = Instantiate(player, GameObject.Find("GameManager").GetComponent<GameManager>().PlayerSpawnLocation, Quaternion.identity);
         newPlayer.name = "Player";
         Destroy(gameObject);
+    }
+
+    public void ResetToPosition(Vector3 pos)
+    {
+        transform.position = pos;
+        transform.rotation = Quaternion.identity;
+        for (int i = 0; i < _boxBehaviours.Count; i++)
+        {
+            //_boxBehaviours[i].GetComponent<Rigidbody>().isKinematic = true;
+            _boxBehaviours[i].transform.localPosition = _boxStartPos[i];
+            _boxBehaviours[i].transform.rotation = Quaternion.identity;
+            //_boxBehaviours[i].GetComponent<Rigidbody>().isKinematic = false;
+        }
     }
 }

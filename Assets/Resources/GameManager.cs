@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    private GameObject _player, _playerFemale, _playerBad;
+    private GameObject _player, _playerFemale, _playerFemale2, _playerBad;
 
-    private Vector3 _startPlayerPos, _startPlayerFemalePos;
-    private Quaternion _startPlayerRot, _startPlayerFemaleRot;
+    private Vector3 _startPlayerPos, _startPlayerFemale2Pos;
+    private Quaternion _startPlayerRot, _startPlayerFemale2Rot;
 
     private GameObject _infoImage;
     private Text _infoText;
@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     private GameObject _controlsPanel;
 
     private readonly Vector3 _firstCameraCheckPoint = new Vector3(7.77f, 8.11f, -16.69619f);
+    private Vector3 _lastCameraCheckPoint = new Vector3(108.47f, 45, -16.69619f);
 
     private float _msgDt;
 
@@ -47,7 +48,24 @@ public class GameManager : MonoBehaviour
         GtCubadGoingDone,
         GtCugoodCry,
         GtCugoodCryDone,
-        GtMainGame
+        GtMainGame,
+        GtMainGameDone,
+        GtCugoodFindsCutie,
+        GtCugoodFindsCutieDone,
+        GtCutierIntro,
+        GtCutierIntroDone,
+        GtCugoodOops,
+        GtCugoodOopsDone,
+        GtCutierFindHer,
+        GtCutierFindHerDone,
+        GtCugoodCompliment,
+        GtCugoodComplimentDone,
+        GtCutierOh,
+        GtCutierOhDone,
+        GtCameraUp,
+        GtCameraUpDone,
+        GtEnd,
+        GtEndDone,
     }
 
     private GameTransition _gameTransition;
@@ -58,15 +76,16 @@ public class GameManager : MonoBehaviour
 	    _player = GameObject.Find("Player");
 	    _player.tag = "Untagged";
         _playerFemale = GameObject.Find("PlayerFemale");
-	    _startPlayerPos = _player.transform.position;
-	    _startPlayerFemaleRot = _playerFemale.transform.rotation;
+	    _playerFemale2 = GameObject.Find("PlayerFemale2");
+        _startPlayerPos = _player.transform.position;
 	    _startPlayerRot = _player.transform.rotation;
-	    _startPlayerFemalePos = _playerFemale.transform.position;
+	    _startPlayerFemale2Pos = _playerFemale2.transform.position;
+        _startPlayerFemale2Rot = _playerFemale2.transform.rotation;
 	    _playerBad = GameObject.Find("PlayerBad");
 	    _playerBad.SetActive(false);
         _infoImage = GameObject.Find("InfoImage");
 	    _infoImage.SetActive(false);
-	    _gameTransition = GameTransition.GtCameraDown;
+	    
 	    _infoText = _infoImage.transform.GetChild(0).GetComponent<Text>();
 	    _introSkipped = false;
 	    _controlsPanel = GameObject.Find("ControlsPanel");
@@ -74,6 +93,10 @@ public class GameManager : MonoBehaviour
 	    _controlsShown = false;
 
 	    ShowMessage("If you cannot stand the intro press Space to skip", Color.black, 3.0f);
+	    _player.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+	    _playerFemale.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+
+	    _gameTransition = GameTransition.GtCameraDown;
     }
 	
 	// Update is called once per frame
@@ -163,7 +186,7 @@ public class GameManager : MonoBehaviour
 	        case GameTransition.GtCubadGoingDone:
 	            _playerBad.SetActive(false);
 	            _playerFemale.SetActive(false);
-	            ShowMessage("Cugood: Nooooo!!! In my tetra honor as Cugood I' ll find you!", Color.blue, 4.0f);
+	            ShowMessage("Cugood: Nooooo !!! In my tetra honor as Cugood I' ll find you even if you somehow can fly and I can't!", Color.blue, 6.0f);
 	            _player.transform.GetChild(0).GetComponent<Rigidbody>().AddForce(50 * Vector3.up, ForceMode.Impulse);
                 _gameTransition = GameTransition.GtCugoodCry;
 	            break;  
@@ -185,6 +208,99 @@ public class GameManager : MonoBehaviour
                     _player = GameObject.Find("Player");
                 Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, new Vector3(_player.transform.GetChild(0).position.x, Camera.main.transform.position.y, Camera.main.transform.position.z), Time.smoothDeltaTime);
                 break;
+	        case GameTransition.GtMainGameDone:
+	            ShowMessage("Cugood: My beloved Cutie! Once again we are together!", Color.blue, 4.0f);
+	            _gameTransition = GameTransition.GtCugoodFindsCutie;
+                break;
+	        case GameTransition.GtCugoodFindsCutie:
+	            if (MessageEnded)
+	            {
+	                _gameTransition = GameTransition.GtCugoodFindsCutieDone;
+                }
+	            break;
+	        case GameTransition.GtCugoodFindsCutieDone:
+	            ShowMessage("Cutier: Gugood I am not Cutie I am Cutier. Cutie is in another box cage.", Color.magenta, 6.0f);
+                _gameTransition = GameTransition.GtCutierIntro;
+	            break;
+	        case GameTransition.GtCutierIntro:
+	            if (MessageEnded)
+	            {
+	                _gameTransition = GameTransition.GtCutierIntroDone;
+	            }
+	            break;
+	        case GameTransition.GtCutierIntroDone:
+	            ShowMessage("Cugood: Oh Sh... Ehm Oops!", Color.blue, 3.0f);
+	            _gameTransition = GameTransition.GtCugoodOops;
+	            break;
+	        case GameTransition.GtCugoodOops:
+	            if (MessageEnded)
+	            {
+	                _gameTransition = GameTransition.GtCugoodOopsDone;
+	            }
+                break;
+	        case GameTransition.GtCugoodOopsDone:
+	            ShowMessage("Cutier: Find her and defeat Cubad once and for all !!! ", Color.magenta, 6.0f);
+	            _gameTransition = GameTransition.GtCutierFindHer;
+                break;
+	        case GameTransition.GtCutierFindHer:
+	            if (MessageEnded)
+	            {
+	                _gameTransition = GameTransition.GtCutierFindHerDone;
+	            }
+	            break;
+	        case GameTransition.GtCutierFindHerDone:
+	            ShowMessage("Cugood: She will be fine... You know you are very cute also...", Color.blue, 6.0f);
+	            _player.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+                _gameTransition = GameTransition.GtCugoodCompliment;
+	            break;
+	        case GameTransition.GtCugoodCompliment:
+	            if (MessageEnded)
+	            {
+	                _gameTransition = GameTransition.GtCugoodComplimentDone;
+	            }
+	            break;
+	        case GameTransition.GtCugoodComplimentDone:
+	            ShowMessage("Cutier: Oh Cugood... ", Color.magenta, 4.0f);
+	            _playerFemale2.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+                _gameTransition = GameTransition.GtCutierOh;
+	            break;
+	        case GameTransition.GtCutierOh:
+	            if (MessageEnded)
+	            {
+	                _gameTransition = GameTransition.GtCutierOhDone;
+	            }
+	            break;
+	        case GameTransition.GtCutierOhDone:
+	            _gameTransition = GameTransition.GtCameraUp;
+                _playerBad.SetActive(true);
+	            HideMessage();
+                break;
+	        case GameTransition.GtCameraUp:
+	            Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, _lastCameraCheckPoint, 0.5f * Time.smoothDeltaTime);
+	            _playerBad.transform.GetChild(0).GetComponent<Rigidbody>().velocity = Vector3.up * 1.0f;
+
+	            if (Vector3.Distance(Camera.main.transform.position, _lastCameraCheckPoint) < 1f)
+	            {
+	                _gameTransition = GameTransition.GtCameraUpDone;
+	            }
+	            break;
+            case GameTransition.GtCameraUpDone:
+                ShowMessage("Cubad: The end ...", Color.black, 4.0f);
+                _gameTransition = GameTransition.GtEnd;
+                break;
+	        case GameTransition.GtEnd:
+	            _playerBad.transform.GetChild(0).GetComponent<Rigidbody>().velocity = Vector3.up * 1.0f;
+                if (MessageEnded)
+	            {
+	                _gameTransition = GameTransition.GtEndDone;
+                }
+                break;
+	        case GameTransition.GtEndDone:
+	            if (MessageEnded)
+	            {
+	                Application.Quit();
+	            }
+	            break;
             default:
 	            break;
         }
@@ -193,6 +309,8 @@ public class GameManager : MonoBehaviour
 	    {
 	        SkipIntro();
 	    }
+	    _playerFemale2.transform.position = _startPlayerFemale2Pos;
+	    _playerFemale2.transform.rotation = _startPlayerFemale2Rot;
 	}
 
     void SkipIntro()
@@ -206,6 +324,8 @@ public class GameManager : MonoBehaviour
         _player.tag = "Player";
         HideMessage();
         _gameTransition = GameTransition.GtMainGame;
+
+        _playerBad.GetComponent<BoxController>().ResetToPosition(new Vector3(_lastCameraCheckPoint.x, _lastCameraCheckPoint.y - 10, 0));
 
         _introSkipped = true;
     }
@@ -228,12 +348,14 @@ public class GameManager : MonoBehaviour
 
     void DestroyHeartParticles()
     {
-        if (_player.GetComponent<ParticleSystem>() == null)
+        if (_player.transform.GetChild(0).GetComponent<ParticleSystem>() == null)
             return;
-        _player.GetComponent<ParticleSystem>().Stop();
-        _playerFemale.GetComponent<ParticleSystem>().Stop();
-        Destroy(_player.GetComponent<ParticleSystem>());
-        Destroy(_playerFemale.GetComponent<ParticleSystem>());
+        _player.transform.GetChild(0).GetComponent<ParticleSystem>().Stop();
+        //var psMain = _player.GetComponent<ParticleSystem>().main;
+        //psMain.startDelay = 0.0f;
+        _playerFemale.transform.GetChild(0).GetComponent<ParticleSystem>().Stop();
+        //Destroy(_player.GetComponent<ParticleSystem>());
+        //Destroy(_playerFemale.GetComponent<ParticleSystem>());
     }
 
     void EnableCubad()
@@ -246,5 +368,10 @@ public class GameManager : MonoBehaviour
     {
         _controlsShown = !_controlsShown;
         _controlsPanel.SetActive(_controlsShown);
+    }
+
+    public void StartEndingSequence()
+    {
+        _gameTransition = GameTransition.GtMainGameDone;
     }
 }
