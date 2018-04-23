@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[ExecuteInEditMode]
+//[ExecuteInEditMode]
 public class SlotManager : MonoBehaviour
 {
     public int SizeX;
@@ -24,8 +24,25 @@ public class SlotManager : MonoBehaviour
 
     void Awake()
     {
+        while (transform.childCount != 0)
+        {
+            DestroyImmediate(transform.GetChild(0).gameObject);
+        }
+
+        _slotLevel = new GameObject[SizeX, SizeY];
+        GameObject slot = Resources.Load("Slot") as GameObject;
+        for (var i = 0; i < SizeX; i++)
+        {
+            for (var j = 0; j < SizeY; j++)
+            {
+                _slotLevel[i, j] = Instantiate(slot, transform.position + Vector3.right * i + Vector3.up * j, Quaternion.identity, transform);
+            }
+        }
+
+        _boxesToDestroy = new HashSet<GameObject>();
     }
 
+    /*
     void OnValidate()
     {
         StartCoroutine(OnValidateDelayed());
@@ -52,6 +69,7 @@ public class SlotManager : MonoBehaviour
 
         _boxesToDestroy = new HashSet<GameObject>();
     }
+    */
 
     // Update is called once per frame
     void Update ()
