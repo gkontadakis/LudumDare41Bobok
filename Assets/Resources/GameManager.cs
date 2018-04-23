@@ -36,6 +36,8 @@ public class GameManager : MonoBehaviour
 
     private bool _controlsShown;
 
+    private ParticleManager _particleManager;
+
     private enum GameTransition
     {
         GtNone,
@@ -90,16 +92,19 @@ public class GameManager : MonoBehaviour
 	    _playerBad.SetActive(false);
         _infoImage = GameObject.Find("InfoImage");
 	    _infoImage.SetActive(false);
-	    
-	    _infoText = _infoImage.transform.GetChild(0).GetComponent<Text>();
+
+	    _particleManager = GameObject.Find("ParticleManager").GetComponent<ParticleManager>();
+
+        _infoText = _infoImage.transform.GetChild(0).GetComponent<Text>();
 	    _introSkipped = false;
 	    _controlsPanel = GameObject.Find("ControlsPanel");
         _controlsPanel.SetActive(false);
 	    _controlsShown = false;
 
 	    ShowMessage("If you cannot stand the intro press Space to skip", Color.black, 4.5f);
-	    _player.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
-	    _playerFemale.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+
+	    _particleManager.GetParticleSystem("Player").Play();
+	    _particleManager.GetParticleSystem("PlayerFemale").Play();
 
 	    _gameTransition = GameTransition.GtCameraDown;
     }
@@ -156,7 +161,7 @@ public class GameManager : MonoBehaviour
 	            _gameTransition = GameTransition.GtCubadComing;
 	            EnableCubad();
 	            AudioSource.PlayClipAtPoint(DialogClips[2], Camera.main.transform.position, 0.5f);
-                ShowMessage("Cubad: Sorry for interupting", Color.black, 4.0f);
+                ShowMessage("Cubad: Sorry for interrupting", Color.black, 4.0f);
 
 	            GetComponent<AudioSource>().clip = AmbientClips[0];
 	            GetComponent<AudioSource>().Play();
@@ -238,7 +243,7 @@ public class GameManager : MonoBehaviour
                 }
 	            break;
 	        case GameTransition.GtCugoodFindsCutieDone:
-	            ShowMessage("Cutier: Gugood I am not Cutie I am Cutier. Cutie is in another box cage.", Color.magenta, 6.0f);
+	            ShowMessage("Cutier: Gugood I am not Cutie I am Cutier. Cutie is in another Cage.", Color.magenta, 6.0f);
 	            AudioSource.PlayClipAtPoint(DialogClips[6], Camera.main.transform.position, 0.5f);
                 _gameTransition = GameTransition.GtCutierIntro;
 	            break;
@@ -273,7 +278,7 @@ public class GameManager : MonoBehaviour
 	        case GameTransition.GtCutierFindHerDone:
 	            ShowMessage("Cugood: She will be fine... You know you are very cute also...", Color.blue, 6.0f);
 	            AudioSource.PlayClipAtPoint(DialogClips[9], Camera.main.transform.position, 0.5f);
-                _player.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+	            _particleManager.GetParticleSystem("Player").Play();
                 _gameTransition = GameTransition.GtCugoodCompliment;
 	            break;
 	        case GameTransition.GtCugoodCompliment:
@@ -285,7 +290,7 @@ public class GameManager : MonoBehaviour
 	        case GameTransition.GtCugoodComplimentDone:
 	            ShowMessage("Cutier: Oh Cugood... ", Color.magenta, 4.0f);
 	            AudioSource.PlayClipAtPoint(DialogClips[10], Camera.main.transform.position, 0.5f);
-                _playerFemale2.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+	            _particleManager.GetParticleSystem("PlayerFemale2").Play();
                 _gameTransition = GameTransition.GtCutierOh;
 	            break;
 	        case GameTransition.GtCutierOh:
@@ -377,14 +382,8 @@ public class GameManager : MonoBehaviour
 
     void DestroyHeartParticles()
     {
-        if (_player.transform.GetChild(0).GetComponent<ParticleSystem>() == null)
-            return;
-        _player.transform.GetChild(0).GetComponent<ParticleSystem>().Stop();
-        //var psMain = _player.GetComponent<ParticleSystem>().main;
-        //psMain.startDelay = 0.0f;
-        _playerFemale.transform.GetChild(0).GetComponent<ParticleSystem>().Stop();
-        //Destroy(_player.GetComponent<ParticleSystem>());
-        //Destroy(_playerFemale.GetComponent<ParticleSystem>());
+        _particleManager.GetParticleSystem("Player").Stop();
+        _particleManager.GetParticleSystem("PlayerFemale").Stop();
     }
 
     void EnableCubad()
