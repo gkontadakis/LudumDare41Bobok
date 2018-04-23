@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+
+    public List<AudioClip> DialogClips;
+
     private GameObject _player, _playerFemale, _playerFemale2, _playerBad;
 
     private Vector3 _startPlayerPos, _startPlayerFemale2Pos;
@@ -125,6 +128,7 @@ public class GameManager : MonoBehaviour
 	            Camera.main.transform.position = _firstCameraCheckPoint;
 	            _gameTransition = GameTransition.GtCuGoodLoveLine;
 	            ShowMessage("Cugood: Ahhh... Pssstfffs mouts mouts", Color.blue, 2.5f);
+                AudioSource.PlayClipAtPoint(DialogClips[0], Camera.main.transform.position);
                 break;
 	        case GameTransition.GtCuGoodLoveLine:
 	            if (MessageEnded)
@@ -136,6 +140,7 @@ public class GameManager : MonoBehaviour
 	            Camera.main.transform.position = _firstCameraCheckPoint;
 	            _gameTransition = GameTransition.GtCutieLoveLine;
 	            ShowMessage("Cutie: Ahhh... Pssstfffs mouts mouts", Color.magenta, 2.5f);
+	            AudioSource.PlayClipAtPoint(DialogClips[1], Camera.main.transform.position);
                 break;
 	        case GameTransition.GtCutieLoveLine:
 	            if (MessageEnded)
@@ -148,7 +153,10 @@ public class GameManager : MonoBehaviour
 	            DestroyHeartParticles();
 	            _gameTransition = GameTransition.GtCubadComing;
 	            EnableCubad();
-	            _player.transform.GetChild(2).GetComponent<Rigidbody>().AddForce(10 * Vector3.left, ForceMode.Impulse);
+	            AudioSource.PlayClipAtPoint(DialogClips[2], Camera.main.transform.position);
+                ShowMessage("Cubad: Sorry for interupting", Color.black, 4.0f);
+
+                _player.transform.GetChild(2).GetComponent<Rigidbody>().AddForce(10 * Vector3.left, ForceMode.Impulse);
 	            _playerFemale.transform.GetChild(3).GetComponent<Rigidbody>().AddForce(10 * Vector3.right, ForceMode.Impulse);
                 break;
             case GameTransition.GtCubadComing:
@@ -161,7 +169,8 @@ public class GameManager : MonoBehaviour
                 break;
 	        case GameTransition.GtCubadComingDone:
                 ShowMessage("Cubad: I will take this beautiful lady just because I can", Color.black, 4.0f);
-	            _gameTransition = GameTransition.GtCubadTaking;
+	            AudioSource.PlayClipAtPoint(DialogClips[2], Camera.main.transform.position);
+                _gameTransition = GameTransition.GtCubadTaking;
                 break;
 	        case GameTransition.GtCubadTaking:
 	            _playerBad.transform.GetChild(0).GetComponent<Rigidbody>().velocity = Vector3.up * 1.0f;
@@ -173,7 +182,8 @@ public class GameManager : MonoBehaviour
 	            break;
 	        case GameTransition.GtCubadTakingDone:
 	            ShowMessage("Cutie: Ahhh! Help me Cugood!", Color.magenta, 2.5f);
-	            _gameTransition = GameTransition.GtCubadGoing;
+	            AudioSource.PlayClipAtPoint(DialogClips[3], Camera.main.transform.position);
+                _gameTransition = GameTransition.GtCubadGoing;
                 break;
 	        case GameTransition.GtCubadGoing:
 	            _playerBad.transform.GetChild(0).GetComponent<Rigidbody>().velocity = (Vector3.up + 2.5f * Vector3.right) * 2.5f;
@@ -186,8 +196,9 @@ public class GameManager : MonoBehaviour
 	        case GameTransition.GtCubadGoingDone:
 	            _playerBad.SetActive(false);
 	            _playerFemale.SetActive(false);
-	            ShowMessage("Cugood: Nooooo !!! In my tetra honor as Cugood I' ll find you even if you somehow can fly and I can't!", Color.blue, 6.0f);
-	            _player.transform.GetChild(0).GetComponent<Rigidbody>().AddForce(50 * Vector3.up, ForceMode.Impulse);
+	            ShowMessage("Cugood: Nooooo !!! I' ll find you! Even if you somehow can fly and I can't...", Color.blue, 6.0f);
+	            AudioSource.PlayClipAtPoint(DialogClips[4], Camera.main.transform.position);
+                _player.transform.GetChild(0).GetComponent<Rigidbody>().AddForce(50 * Vector3.up, ForceMode.Impulse);
                 _gameTransition = GameTransition.GtCugoodCry;
 	            break;  
 	        case GameTransition.GtCugoodCry:
@@ -210,7 +221,8 @@ public class GameManager : MonoBehaviour
                 break;
 	        case GameTransition.GtMainGameDone:
 	            ShowMessage("Cugood: My beloved Cutie! Once again we are together!", Color.blue, 4.0f);
-	            _gameTransition = GameTransition.GtCugoodFindsCutie;
+	            AudioSource.PlayClipAtPoint(DialogClips[5], Camera.main.transform.position);
+                _gameTransition = GameTransition.GtCugoodFindsCutie;
                 break;
 	        case GameTransition.GtCugoodFindsCutie:
 	            if (MessageEnded)
@@ -220,6 +232,7 @@ public class GameManager : MonoBehaviour
 	            break;
 	        case GameTransition.GtCugoodFindsCutieDone:
 	            ShowMessage("Cutier: Gugood I am not Cutie I am Cutier. Cutie is in another box cage.", Color.magenta, 6.0f);
+	            AudioSource.PlayClipAtPoint(DialogClips[6], Camera.main.transform.position);
                 _gameTransition = GameTransition.GtCutierIntro;
 	            break;
 	        case GameTransition.GtCutierIntro:
@@ -230,7 +243,8 @@ public class GameManager : MonoBehaviour
 	            break;
 	        case GameTransition.GtCutierIntroDone:
 	            ShowMessage("Cugood: Oh Sh... Ehm Oops!", Color.blue, 3.0f);
-	            _gameTransition = GameTransition.GtCugoodOops;
+	            AudioSource.PlayClipAtPoint(DialogClips[7], Camera.main.transform.position);
+                _gameTransition = GameTransition.GtCugoodOops;
 	            break;
 	        case GameTransition.GtCugoodOops:
 	            if (MessageEnded)
@@ -240,7 +254,8 @@ public class GameManager : MonoBehaviour
                 break;
 	        case GameTransition.GtCugoodOopsDone:
 	            ShowMessage("Cutier: Find her and defeat Cubad once and for all !!! ", Color.magenta, 6.0f);
-	            _gameTransition = GameTransition.GtCutierFindHer;
+	            AudioSource.PlayClipAtPoint(DialogClips[8], Camera.main.transform.position);
+                _gameTransition = GameTransition.GtCutierFindHer;
                 break;
 	        case GameTransition.GtCutierFindHer:
 	            if (MessageEnded)
@@ -250,7 +265,8 @@ public class GameManager : MonoBehaviour
 	            break;
 	        case GameTransition.GtCutierFindHerDone:
 	            ShowMessage("Cugood: She will be fine... You know you are very cute also...", Color.blue, 6.0f);
-	            _player.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+	            AudioSource.PlayClipAtPoint(DialogClips[9], Camera.main.transform.position);
+                _player.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
                 _gameTransition = GameTransition.GtCugoodCompliment;
 	            break;
 	        case GameTransition.GtCugoodCompliment:
@@ -261,7 +277,8 @@ public class GameManager : MonoBehaviour
 	            break;
 	        case GameTransition.GtCugoodComplimentDone:
 	            ShowMessage("Cutier: Oh Cugood... ", Color.magenta, 4.0f);
-	            _playerFemale2.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+	            AudioSource.PlayClipAtPoint(DialogClips[10], Camera.main.transform.position);
+                _playerFemale2.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
                 _gameTransition = GameTransition.GtCutierOh;
 	            break;
 	        case GameTransition.GtCutierOh:
@@ -286,6 +303,7 @@ public class GameManager : MonoBehaviour
 	            break;
             case GameTransition.GtCameraUpDone:
                 ShowMessage("Cubad: The end ...", Color.black, 4.0f);
+                AudioSource.PlayClipAtPoint(DialogClips[11], Camera.main.transform.position);
                 _gameTransition = GameTransition.GtEnd;
                 break;
 	        case GameTransition.GtEnd:
@@ -311,6 +329,7 @@ public class GameManager : MonoBehaviour
 	    }
 	    _playerFemale2.transform.position = _startPlayerFemale2Pos;
 	    _playerFemale2.transform.rotation = _startPlayerFemale2Rot;
+
 	}
 
     void SkipIntro()
@@ -361,7 +380,6 @@ public class GameManager : MonoBehaviour
     void EnableCubad()
     {
         _playerBad.SetActive(true);
-        ShowMessage("Cubad: Sorry for interupting", Color.black, 4.0f);
     }
 
     public void ToggleControlPanel()    // Called by Buttons in Editor

@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1461580424088808}
+  m_IsPrefabParent: 1
+--- !u!1 &1461580424088808
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4214477622484158}
+  - component: {fileID: 114072024359422108}
+  m_Layer: 0
+  m_Name: GameManager 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4214477622484158
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1461580424088808}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.2040243, y: -13.229616, z: 27.237385}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114072024359422108
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1461580424088808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f94d51d5d097b54b85485d7b7165d1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DialogClips:
+  - {fileID: 8300000, guid: 974a81b8c8a99d04c9b893e55e36a39b, type: 3}
+  - {fileID: 8300000, guid: cb6822b986628844ca825b6d92dfc53b, type: 3}
+  - {fileID: 8300000, guid: a494702f5aede4a40996565478a0b3d7, type: 3}
+  - {fileID: 8300000, guid: dcd1316020825ca4c991142d98981201, type: 3}
+  - {fileID: 8300000, guid: d258db24201d13347aa079dd65e2e363, type: 3}
+  - {fileID: 8300000, guid: 71e6ba0073988cf4699789c61c82ba53, type: 3}
+  - {fileID: 8300000, guid: 5bbe130c77181d348bdc88e74e2fbd9a, type: 3}
+  - {fileID: 8300000, guid: 5912199e89a157d45a7c4a1b7fa41ecb, type: 3}
+  - {fileID: 8300000, guid: 2629eefa79641ae47ae3f8a0f2c3e34b, type: 3}
+  - {fileID: 8300000, guid: 0db4413295b77dd46a04592936300ac9, type: 3}
+  - {fileID: 8300000, guid: dc8d4ce88c5199047b5462d4509f1f5f, type: 3}
+  - {fileID: 8300000, guid: 67fcc8597f3651e4a8b48681348239ba, type: 3}
+  PlayerSpawnLocation: {x: 8.55, y: 1.05, z: 0}
