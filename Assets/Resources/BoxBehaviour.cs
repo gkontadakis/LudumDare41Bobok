@@ -52,9 +52,9 @@ public class BoxBehaviour : MonoBehaviour
         }
         else if(_placeAnimStarted)
         {
-            transform.localPosition = Vector3.Lerp(transform.localPosition, Vector3.zero, 2.0f * Time.smoothDeltaTime);
-            transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.identity, 2.5f * Time.smoothDeltaTime);
-            if (Vector3.Distance(transform.localPosition, Vector3.zero) < 0.01f)    // TODO proper check Z angle of quaternion  
+            transform.localPosition = Vector3.Lerp(transform.localPosition, Vector3.zero, 5.0f * Time.smoothDeltaTime);
+            transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.identity, 5.5f * Time.smoothDeltaTime);
+            if (Vector3.Distance(transform.localPosition, Vector3.zero) < 0.05f)    // TODO proper check Z angle of quaternion  
             {
                 transform.localPosition = Vector3.zero;
                 transform.localRotation = Quaternion.identity;
@@ -69,7 +69,7 @@ public class BoxBehaviour : MonoBehaviour
             color.a = Mathf.PingPong(2.5f * Time.time, 1);
             GetComponent<Renderer>().material.SetColor("_Color", color);
 
-            transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 2.5f * Time.smoothDeltaTime);
+            transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 5.5f * Time.smoothDeltaTime);
             if (Vector3.Distance(transform.localScale, Vector3.zero) < 0.1f)
             {
                 _playDestroyAnim = false;

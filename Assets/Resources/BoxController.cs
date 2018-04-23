@@ -15,7 +15,7 @@ public class BoxController : MonoBehaviour
     private List<Vector3> _boxStartPos;
 
     // Use this for initialization
-    void Start()
+    void Awake()
     {
         _boxBehaviours = new List<BoxBehaviour>();
         _boxStartPos = new List<Vector3>();

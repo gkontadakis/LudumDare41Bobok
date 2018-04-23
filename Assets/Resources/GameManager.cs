@@ -302,7 +302,8 @@ public class GameManager : MonoBehaviour
 	        case GameTransition.GtCutierOhDone:
 	            _gameTransition = GameTransition.GtCameraUp;
                 _playerBad.SetActive(true);
-	            HideMessage();
+	            _playerBad.GetComponent<BoxController>().ResetToPosition(new Vector3(_lastCameraCheckPoint.x, _lastCameraCheckPoint.y - 10, 0));
+                HideMessage();
                 break;
 	        case GameTransition.GtCameraUp:
 	            Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, _lastCameraCheckPoint, 0.5f * Time.smoothDeltaTime);
@@ -355,8 +356,6 @@ public class GameManager : MonoBehaviour
         _player.tag = "Player";
         HideMessage();
         _gameTransition = GameTransition.GtMainGame;
-
-        _playerBad.GetComponent<BoxController>().ResetToPosition(new Vector3(_lastCameraCheckPoint.x, _lastCameraCheckPoint.y - 10, 0));
 
         _introSkipped = true;
 
